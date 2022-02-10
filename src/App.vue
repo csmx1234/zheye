@@ -1,16 +1,32 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <nav-bar :user="currentUser"></nav-bar>
+  <h1 v-if="isLoading">正在读取</h1>
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+import { defineComponent, computed } from 'vue'
+import { useStore } from 'vuex'
+import navBar, { iUser } from './components/NavBar.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
-    HelloWorld
+    navBar
+  },
+  setup() {
+    const store = useStore()
+    const currentUser: iUser = {
+      isLogin: false,
+      userName: 'Siming'
+    }
+
+    const isLoading = computed(() => store.state.loading)
+
+    return {
+      currentUser,
+      isLoading
+    }
   }
 })
 </script>
@@ -18,10 +34,11 @@ export default defineComponent({
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 </style>
