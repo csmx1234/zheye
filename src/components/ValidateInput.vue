@@ -1,12 +1,20 @@
 <template>
   <div id="validate-input">
     <input
+      v-if="tag !== 'textarea'"
       :class="{'invalid-input':inputRef.error}"
       :value="inputRef.val"
       @blur="validateInput"
       @input="updateValue"
       v-bind="$attrs"
     >
+    <textarea
+      v-else
+      :value="inputRef.val"
+      @input="updateValue"
+      v-bind="$attrs"
+      class="post_content"
+    ></textarea>
     <p v-if="inputRef.error">{{inputRef.message}}</p>
   </div>
 </template>
@@ -17,15 +25,21 @@ import { emitter } from './ValidateForm.vue'
 
 const emailReg = new RegExp('^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$')
 interface RuleProp {
-  type: 'required' | 'email';
+  type: 'required' | 'email' | 'custom';
   message: string;
+  validator?: () => boolean
 }
 export type RulesProp = RuleProp[]
+export type TagType = 'input' | 'textarea'
 export default defineComponent({
   name: 'ValidateInput',
   props: {
     rules: Array as PropType<RulesProp>,
-    modelValue: String
+    modelValue: String,
+    tag: {
+      type: String as PropType<TagType>,
+      default: 'input'
+    }
   },
   inheritAttrs: false,
   setup(props, context) {
@@ -52,6 +66,9 @@ export default defineComponent({
               break
             case 'email':
               passed = emailReg.test(inputRef.val)
+              break
+            case 'custom':
+              passed = rule.validator ? rule.validator() : true
               break
             default:
               break
@@ -98,5 +115,10 @@ input:focus {
 
 p {
   color: red;
+}
+
+.post_content {
+  font-size: 2rem;
+  width: 60rem;
 }
 </style>

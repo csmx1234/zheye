@@ -2,7 +2,7 @@
   <div id="PostList">
     <article v-for="post in list" :key="post._id">
       <div>
-        <h4>{{post.title}}</h4>
+        <router-link :to="`/posts/${post._id}`">{{post.title}}</router-link>
         <div>
           <div v-if="post.image">
             <img :src="post.image.url" :alt="post.title">

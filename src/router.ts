@@ -1,7 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
-import ColumnDetail from '../src/views/ColumnDetail.vue'
+import SignUp from './views/SignUp.vue'
+import ColumnDetail from './views/ColumnDetail.vue'
+import Write from './views/WritePost.vue'
+import Posts from './views/PostDetail.vue'
 
 const routerHistory = createWebHistory()
 const router = createRouter({
@@ -18,9 +21,24 @@ const router = createRouter({
       component: Login
     },
     {
+      path: '/signup',
+      name: 'signup',
+      component: SignUp
+    },
+    {
       path: '/column/:id',
       name: 'column',
       component: ColumnDetail
+    },
+    {
+      path: '/write',
+      name: 'write',
+      component: Write
+    },
+    {
+      path: '/posts/:id',
+      name: 'posts',
+      component: Posts
     }
   ]
 })
