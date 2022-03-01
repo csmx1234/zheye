@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="ColumnWrapper">
-    <div class="ColumnHeading">
+    <div class="ColumnHeading" v-if="column">
       <div class="HeadingImage">
         <img :src="column.avatar.url" :alt="column.title">
       </div>
@@ -57,6 +57,8 @@ export default defineComponent({
 }
 
 .HeadingImage img{
+  width: 12rem;
+  height: 12rem;
   border-radius: 50%;
   margin-right: 2rem;
 }

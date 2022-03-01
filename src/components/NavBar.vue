@@ -72,7 +72,7 @@ export default defineComponent({
 
 <style scoped>
 #navbar {
-    background-color: rgb(19,91,252);
+    background-color: var(--blue);
     width: 100%;
     height: 4rem;
     display: flex;
@@ -117,7 +117,7 @@ export default defineComponent({
 }
 
 .menu a:hover, .navbar__menus a:hover {
-    color:rgb(19,91,252);
+    color: var(--blue);
     background-color: white;
 }
 
@@ -144,7 +144,7 @@ export default defineComponent({
 }
 
 .dropdown a {
-    color:rgb(19,91,252);
+    color: var(--blue);
 }
 
 </style>

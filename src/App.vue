@@ -57,4 +57,8 @@ export default defineComponent({
     margin: 0;
     box-sizing: border-box;
 }
+
+:root {
+  --blue: rgb(19,91,252);
+}
 </style>

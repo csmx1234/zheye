@@ -5,6 +5,7 @@
         action="/upload"
         :beforeUpload="beforeUpload"
         @file-uploaded="onFileUploaded"
+        :uploaded="uploadedData"
       >
         <h2>点击上传</h2>
         <template #loading>
@@ -32,13 +33,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import ValidateInput from '../components/ValidateInput.vue'
 import Uploader from '../components/Uploader.vue'
 import createMessage from '../components/createMessage'
 import { GlobalDataProps, ResponseType, ImageProps, PostProps } from '../store'
 import { beforeUploadCheck } from '../helper'
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -47,10 +49,24 @@ export default defineComponent({
   },
   name: "write",
   setup(props, context) {
+    const uploadedData = ref()
     const titleValue = ref<string>('')
     const postValue = ref<string>('')
     let imageId = ''
+    const route = useRoute()
+    const isEditMode = !!route.query.id
     const store = useStore()
+
+    onMounted(() => {
+      if (isEditMode) {
+        store.dispatch('fetchPost', route.query.id).then((rawData: ResponseType<PostProps>) => {
+          const currentPost = rawData.data
+          if (currentPost.image) {
+            uploadedData.value = { data: currentPost.image }
+          }
+        })
+      }
+    })
 
     const beforeUpload = (file: File) => {
       const { passed, error } = beforeUploadCheck(file, {fileType:['image/jpeg','image/png'], size:1})
@@ -89,7 +105,8 @@ export default defineComponent({
       postValue,
       beforeUpload,
       onFileUploaded,
-      onSubmit
+      onSubmit,
+      uploadedData
     }
   }
 })
@@ -110,6 +127,7 @@ export default defineComponent({
   width: 60rem;
   height: 20rem;
   margin-bottom: 2rem;
+  cursor: pointer;
 }
 
 .file-upload-container img {
